@@ -33,3 +33,15 @@ or load the env file from local machine
 ```shell
 docker run -it --env-file ./.env  -p 5000:5000 -v $(pwd):/usr/src/app:ro -v /usr/src/app/node_modules --rm express-app 
 ```
+
+## Docker Compose
+
+note that you need to have a docker-compose.yml file on the root that has all configyartion for the containers needed in the app
+
+[docker compose versions](https://docs.docker.com/compose/compose-file/compose-versioning/)
+
+```shell
+docker-compose up -d
+docker-compose up -d --build
+docker-compose down -v
+```
