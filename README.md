@@ -45,3 +45,14 @@ docker-compose up -d
 docker-compose up -d --build
 docker-compose down -v
 ```
+
+## Run Multiple docker-compose files for dev/prod
+
+docker-compose.yml: base file configuration
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build(force new build)
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build #(force new build)
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
+```

@@ -6,3 +6,4 @@ Dockerfile
 .gitignore
 README.md
 LICENSE
+docker-compose*
