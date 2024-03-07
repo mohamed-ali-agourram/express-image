@@ -7,3 +7,17 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+  
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=express-mongo
+    volumes:
+      - mongo-db:/data/db 
+
+volumes:
+  mongo-db:

@@ -56,3 +56,9 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build #(force new build)
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 ```
+
+## Adding a Mongo Container
+
+```shell
+docker exec -it express_mongo_1 mongosh -u root -p root
+```
