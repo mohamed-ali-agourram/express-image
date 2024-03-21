@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT } = require("./config/config");
 
 const postRouter = require("./routes/postRoute")
+const userRouter = require("./routes/userRoute")
 
 const app = express()
 
@@ -30,7 +31,8 @@ app.get("/", (req, res) => {
 	res.send("<h1>Hello World!!!</h1>")
 })
 
-app.use("/posts", postRouter)
+app.use("/api/posts", postRouter)
+app.use("/api/auth", userRouter)
 
 app.listen(PORT, () => {
 	console.log(`http://localhost:${PORT}`)
