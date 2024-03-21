@@ -62,3 +62,11 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 ```shell
 docker exec -it express_mongo_1 mongosh -u root -p root
 ```
+
+## Container bootup order
+
+loadup mongo instance before node container and that by depending a service into another
+services:
+  node-app:
+    depends_on:
+      - mongo
