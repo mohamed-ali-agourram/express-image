@@ -29,7 +29,7 @@ redisClient.connect().then(() => {
             resave: false,
             saveUninitialized: false,
             httpOnly: true,
-            maxAge: 30000
+            maxAge: 3000000
         }
     }));
 
