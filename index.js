@@ -1,39 +1,63 @@
-const express = require("express")
+const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, REDIS_URL, REDIS_PORT, SESSION_SECRET } = require("./config/config");
+const express = require("express");
 const mongoose = require('mongoose');
-const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT } = require("./config/config");
+const session = require("express-session");
+const Redis = require("redis");
+let RedisStore = require("connect-redis").default
 
-const postRouter = require("./routes/postRoute")
-const userRouter = require("./routes/userRoute")
+const redisClient = Redis.createClient({
+    url: `redis://${REDIS_URL}:${REDIS_PORT}`
+});
 
-const app = express()
+const postRouter = require("./routes/postRoute");
+const userRouter = require("./routes/userRoute");
 
-app.use(express.json());
+const app = express();
 
-const PORT = process.env.PORT || 3000
+redisClient.connect().then(() => {
+    console.log("Connected to Redis");
 
-const MONGO_URL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
+    app.use(session({
+        store: new RedisStore({ client: redisClient }),
+        secret: SESSION_SECRET,
+        cookie: {
+            secure: false,
+            resave: false,
+            saveUninitialized: false,
+            httpOnly: true,
+            maxAge: 30000
+        }
+    }));
 
+    app.use(express.json());
 
-const connectWithRetry = () => {
-	mongoose.connect(MONGO_URL, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true
-	}).then(() => {
-		console.log("Connected to MongoDB")
-	}).catch((e) => {
-		console.log(e)
-		setTimeout(connectWithRetry, 5000)
-	})
-}
-connectWithRetry()
+    const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-	res.send("<h1>Hello World!!!</h1>")
-})
+    const MONGO_URL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`;
 
-app.use("/api/posts", postRouter)
-app.use("/api/auth", userRouter)
+    const connectWithRetry = () => {
+        mongoose.connect(MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(() => {
+            console.log("Connected to MongoDB");
+        }).catch((e) => {
+            console.log(e);
+            setTimeout(connectWithRetry, 5000);
+        });
+    };
+    connectWithRetry();
 
-app.listen(PORT, () => {
-	console.log(`http://localhost:${PORT}`)
-})
+    app.get("/", (req, res) => {
+        res.send("<h1>Hello World!!!</h1>");
+    });
+
+    app.use("/api/posts", postRouter);
+    app.use("/api/auth", userRouter);
+
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+    });
+}).catch((err) => {
+    console.error("Failed to connect to Redis", err);
+});

@@ -70,3 +70,13 @@ services:
   node-app:
     depends_on:
       - mongo
+
+## Authentication with sessions & Redis
+
+you can add a new image even if the docker-compose is alrdy runing since dokcer can detect changes on the docker-compose.yml and just apply them
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+npm install redis connect-redis express-session
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -V #this to build with new anonymos volumes
+```

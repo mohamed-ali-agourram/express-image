@@ -19,7 +19,12 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=root
       - MONGO_INITDB_DATABASE=express-mongo
     volumes:
-      - mongo-db:/data/db 
+      - mongo-db:/data/db
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
 
 volumes:
   mongo-db:
