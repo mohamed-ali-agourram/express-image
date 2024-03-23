@@ -80,3 +80,11 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 npm install redis connect-redis express-session
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -V #this to build with new anonymos volumes
 ```
+
+## Nginx for Load balancing to multiple node containers
+
+scale into two nodes instances
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale node-app=2
+```

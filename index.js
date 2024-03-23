@@ -17,6 +17,8 @@ const app = express();
 redisClient.connect().then(() => {
     console.log("Connected to Redis");
 
+    app.enable("trust proxy");
+
     app.use(session({
         store: new RedisStore({ client: redisClient }),
         secret: SESSION_SECRET,
@@ -48,12 +50,13 @@ redisClient.connect().then(() => {
     };
     connectWithRetry();
 
-    app.get("/", (req, res) => {
+    app.get("/api/v1", (req, res) => {
         res.send("<h1>Hello World!!!</h1>");
+        console.log("Yeah! It's working!");
     });
 
-    app.use("/api/posts", postRouter);
-    app.use("/api/auth", userRouter);
+    app.use("/api/v1/posts", postRouter);
+    app.use("/api/v1/users", userRouter);
 
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
