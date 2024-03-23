@@ -1,6 +1,7 @@
 const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, REDIS_URL, REDIS_PORT, SESSION_SECRET } = require("./config/config");
 const express = require("express");
 const mongoose = require('mongoose');
+const cors = require("cors")
 const session = require("express-session");
 const Redis = require("redis");
 let RedisStore = require("connect-redis").default
@@ -18,6 +19,7 @@ redisClient.connect().then(() => {
     console.log("Connected to Redis");
 
     app.enable("trust proxy");
+    app.use(cors({}))
 
     app.use(session({
         store: new RedisStore({ client: redisClient }),

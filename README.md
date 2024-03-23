@@ -88,3 +88,8 @@ scale into two nodes instances
 ```shell
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale node-app=2
 ```
+
+## Express CORS
+
+CORS allows you to run front-end on a domain and back-end to run on a diffrent domain
+since backend wont accept requests by default from another domain u need to setup CORS(Cross-origin resource sharing)
