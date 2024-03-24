@@ -93,3 +93,17 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale nod
 
 CORS allows you to run front-end on a domain and back-end to run on a diffrent domain
 since backend wont accept requests by default from another domain u need to setup CORS(Cross-origin resource sharing)
+
+## Dev to Prod Workflow
+
+```shell
+# we will only toglle node-app to perevent rebuilding database or the redis datastore 
+# after making changes we build
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml build node-app
+# push to docker hub
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml push node-app  
+# on the prod server pull from docker hub
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull node-app
+# finally run again by rebuilding on teh prod
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps node-app
+```
