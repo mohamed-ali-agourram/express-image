@@ -151,6 +151,8 @@ docker swarm join-token manager
 # run the services with docker swarm on a stack
 docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml myapp
 
-docker node ls
-docker stack services myapp
+docker node ls # List swarm nodes.
+docker service ls # List swarm services.
+docker stack services myapp # List specific stack services.
+docker stack ps myapp # List stack tasks/containers.
 ```

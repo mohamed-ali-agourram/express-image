@@ -53,7 +53,7 @@ redisClient.connect().then(() => {
     connectWithRetry();
 
     app.get("/api/v1", (req, res) => {
-        res.send("<h1>Hello World!!!<br>TESTING WORKFLOW<br>TESTING THE containrrr/watchtower</h1>");
+        res.send("<h1>Hello World!!!<br>TESTING WORKFLOW<br>TESTING THE containrrr/watchtower<br>Docker SWARM Rolling Update TEST 2:11</h1>");
         console.log("Yeah! It's working!");
     });
 
