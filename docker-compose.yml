@@ -8,6 +8,7 @@ services:
 
   node-app:
     build: .
+    image: ali0agourram/express-image
     environment:
       - PORT=3000
     depends_on:
