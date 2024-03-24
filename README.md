@@ -118,3 +118,39 @@ docker run -d --name watchtower -e WATCHTOWER_TRACE=true -e WATCHTOWER_DEBUG=tru
 # now after just build and push on the local machine the watchtower on the WATCHTOWER_POLL_INTERVAL will pull the new image
 # note that if ur pulling from a private docker hub repo you will need to login on the prod in order for WATCHTOWER to work
 ```
+
+## Rolling update (Docker Swarm)
+
+A rolling update is a deployment strategy used in software development and IT operations to update or replace applications and services with minimal downtime and impact on the user experience. This approach involves gradually replacing instances of the old version of an application with instances of the new version, rather than stopping the entire system and updating all components simultaneously. Rolling updates are commonly used in cloud computing, container orchestration platforms like Kubernetes, and other distributed systems.
+
+While docker-compose only used for devloppemnt (docker run commands that are listed on a yaml format) for runing containers Docker Swarm in the other hand can handle runging multiple instances on multiple servers, also can handle updating containers in a smoth way (update check replace) so more flexibility on production
+
+each server within a docker swarm is referd to as a node(manager nodes that controlls worker nodes also manager can be worker nodes)
+
+```shell
+# setting docker swarm on prod(its shiped with docker but its disabled by default)
+# 1 get an ip adress on the machine
+ip add
+# chose a public ip
+# This IP address, 164.92.139.11, is outside of the private IP address ranges defined by RFC 1918, which are:
+# 10.0.0.0 to 10.255.255.255
+# 172.16.0.0 to 172.31.255.255
+# 192.168.0.0 to 192.168.255.255
+docker swarm init --advertise-addr 164.92.139.11
+# the command will add your server to be now the first manager node of a new Docker Swarm cluster, and it's ready to have other nodes join as either managers or workers. The cluster is now waiting for you to deploy services to it or to expand the cluster with additional nodes. Docker Swarm allows you to manage multiple Docker hosts easily, scale your application across multiple nodes, ensure high availability, and more.
+
+# add a node(server) to the swarm as a worker node
+docker swarm join --token SWMTKN-1-0b202zb8w4eqz9w5jvuqc1jbev77n1bzbgzesddidw8rx1krhs-aepymrmqmn46cvl02wwm0mb8s 164.92.139.11:2377
+# add a node to the swarm as a manger node
+docker swarm join-token manager
+# it generates a command that includes a token. This token is specifically for adding additional manager nodes to your swarm
+# This command will output something like the following:
+# To add a manager to this swarm, run the following command:
+    docker swarm join --token SWMTKN-1-xxxxxxx 164.92.139.11:2377
+
+# run the services with docker swarm on a stack
+docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml myapp
+
+docker node ls
+docker stack services myapp
+```
