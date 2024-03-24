@@ -107,3 +107,14 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull node-app
 # finally run again by rebuilding on teh prod
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps node-app
 ```
+
+## Automating with watchtower
+
+Automaticly Detect changes on Docker Hub image and pull that new image using watchtower
+
+```shell
+# on prod server:
+docker run -d --name watchtower -e WATCHTOWER_TRACE=true -e WATCHTOWER_DEBUG=true -e WATCHTOWER_POLL_INTERVAL=50 -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower express-image-node-app-1
+# now after just build and push on the local machine the watchtower on the WATCHTOWER_POLL_INTERVAL will pull the new image
+# note that if ur pulling from a private docker hub repo you will need to login on the prod in order for WATCHTOWER to work
+```
